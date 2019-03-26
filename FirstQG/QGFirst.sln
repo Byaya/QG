@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28306.52
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QGFirst", "QGFirst.vcxproj", "{29099CA0-3962-435A-B7E2-81A07D7D1F8E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{29099CA0-3962-435A-B7E2-81A07D7D1F8E}.Debug|x64.ActiveCfg = Debug|x64
+		{29099CA0-3962-435A-B7E2-81A07D7D1F8E}.Debug|x64.Build.0 = Debug|x64
+		{29099CA0-3962-435A-B7E2-81A07D7D1F8E}.Debug|x86.ActiveCfg = Debug|Win32
+		{29099CA0-3962-435A-B7E2-81A07D7D1F8E}.Debug|x86.Build.0 = Debug|Win32
+		{29099CA0-3962-435A-B7E2-81A07D7D1F8E}.Release|x64.ActiveCfg = Release|x64
+		{29099CA0-3962-435A-B7E2-81A07D7D1F8E}.Release|x64.Build.0 = Release|x64
+		{29099CA0-3962-435A-B7E2-81A07D7D1F8E}.Release|x86.ActiveCfg = Release|Win32
+		{29099CA0-3962-435A-B7E2-81A07D7D1F8E}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E06361F8-4190-4B1F-B8EA-F77B3DAA285F}
+	EndGlobalSection
+EndGlobal
