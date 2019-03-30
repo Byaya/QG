@@ -22,6 +22,12 @@ void Operation::Transform(char * middle)
 		if (middle[i] == '-')
 		{
 			temp = '+';
+			while (!stackChar.Empty() && Prio(stackChar.GetTopElem()) >= Prio(temp))
+			{
+				float temp = Computer(stackNum.PopStack(), stackNum.PopStack(),
+					stackChar.PopStack());
+				stackNum.PushStakc(&temp);
+			}
 			stackChar.PushStakc(&temp);
 			++i;
 			numFlag = true;
