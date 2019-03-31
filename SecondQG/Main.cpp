@@ -9,5 +9,6 @@ int main()
 	char* temp = new char[255];
 	std::cin >> temp;
 	text.Transform(temp);
+	delete temp;
 	return 0;
 }
