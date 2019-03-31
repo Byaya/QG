@@ -14,6 +14,7 @@ void Operation::Transform(char * middle)
 {
 	int i = 0;
 	bool numFlag = false;
+	bool kuFlag = false;
 	char temp = '\0';
 	float num = 0;
 	while (middle[i]!='\0')
@@ -67,17 +68,33 @@ void Operation::Transform(char * middle)
 		{
 			stackChar.PushStakc(middle + i);
 			++i;
+			numFlag = false;
+			kuFlag = true;
 			continue;
 		}
 		//”“¿®∫≈
 		if (middle[i] == ')')
 		{
-			temp = stackChar.PopStack();
-			while (temp!='(')
+			if (kuFlag)
 			{
-				num = Computer(stackNum.PopStack(), stackNum.PopStack(), temp);
-				stackNum.PushStakc(&num);
 				temp = stackChar.PopStack();
+				while (temp != '(')
+				{
+					num = Computer(-stackNum.PopStack(), -stackNum.PopStack(), temp);
+					stackNum.PushStakc(&num);
+					temp = stackChar.PopStack();
+				}
+				kuFlag = false;
+			}
+			else
+			{
+				temp = stackChar.PopStack();
+				while (temp != '(')
+				{
+					num = Computer(stackNum.PopStack(), stackNum.PopStack(), temp);
+					stackNum.PushStakc(&num);
+					temp = stackChar.PopStack();
+				}
 			}
 			++i;
 			continue;
