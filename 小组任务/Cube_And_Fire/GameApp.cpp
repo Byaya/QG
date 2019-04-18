@@ -192,7 +192,7 @@ void GameApp::DrawScene()
 			//"切换模型: Q-立方体 W-球体 E-圆柱体";
 		static const WCHAR* textInfor = L"2019QG工作室手游组第4次小组培训\n"
 										 "                         朱豪光\n"
-										 "                   2019年4月x日";
+										 "                   2019年4月19日";
 		m_pd2dRenderTarget->DrawTextW(textStr, (UINT32)wcslen(textStr), m_pTextFormat.Get(),
 			D2D1_RECT_F{ 0.0f, 0.0f, 600.0f, 200.0f }, m_pColorBrush.Get());
 		m_pd2dRenderTarget->DrawTextW(textInfor, (UINT32)wcslen(textInfor), m_pTextFormat.Get(),
