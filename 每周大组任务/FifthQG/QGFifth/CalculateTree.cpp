@@ -4,259 +4,151 @@
 /*构造函数*/
 CalculateTree::CalculateTree()
 {
+	infix.clear();
+	opers.clear();
+	prefix.clear();
+	lastNodes.clear();
 	prt_size = 0;
+	prt_level = 0;
 	prt_root = nullptr;
 }
 
 /*析构函数*/
 CalculateTree::~CalculateTree()
 {
+	
 
 }
 
-void CalculateTree::AddNode(const char & key, int direction)
+void CalculateTree::Transform(const std::vector<std::string>& infix, std::vector<std::string>& prefix, std::map<std::string, int>& opers)
 {
-	AddNode(key, direction, prt_root);
-	++prt_size;
-}
-
-///*在指定位置插入结点*/
-//void CalculateTree::InsertNode(char elem)
-//{
-//	//创建新结点
-//	Yaya<char>* node = new Yaya<char>();
-//	node->data = elem;
-//	if (prt_size == 0)
-//	{
-//		prt_size = 1;
-//		prt_root = node;
-//		return;
-//	}
-//	Yaya<char>* tempNode = prt_root;
-//	Yaya<char>* preNode = prt_root;
-//	//创建链栈
-//	StackTree<char> stack;
-//	//当前树结点
-//	Yaya<char>* currNode = new Yaya<char>();
-//	//临时树结点
-//	Yaya<char>* temp = currNode;
-//	while (tempNode || !stack.IsStackEmpty())
-//	{
-//		if (tempNode)
-//		{
-//			
-//			stack.PushStack(tempNode);
-//			if (tempNode->left)
-//			{
-//				preNode = tempNode;
-//			}
-//			tempNode = tempNode->left;
-//			
-//		}
-//		else
-//		{
-//			stack.PopStack(&currNode);
-//			
-//			tempNode = currNode->right;
-//			
-//		}
-//	}
-//	if ((preNode)->left && !(preNode)->right)
-//	{
-//		(preNode)->right = node;
-//	}
-//	else if(!(preNode)->left)
-//	{
-//		(preNode)->left = node;
-//	}
-//	else
-//	{
-//		tempNode = prt_root;
-//		Yaya<char>* tempNode1 = prt_root;
-//		int left = 0;
-//		int right = 0;
-//		int max = 1;
-//		int sum = 1;
-//		while (tempNode->left)
-//		{
-//			++left;
-//			tempNode = (tempNode)->left;
-//		}
-//		while (tempNode1->right)
-//		{
-//			++right;
-//			tempNode1 = (tempNode1)->right;
-//		}
-//		for (int i = 0; i < left; i++)
-//		{
-//			max *= 2;
-//			sum += max;
-//		}
-//		if (sum - prt_size <= max / 2 && sum != prt_size)
-//		{
-//			(preNode) = tempNode1;
-//			(preNode)->left = node;
-//		}
-//		else
-//		{
-//			(preNode) = tempNode;
-//			(preNode)->left = node;
-//		}
-//	}
-//	++prt_size;
-//	delete temp;
-//}
-
-/*根据字符串创建二叉树*/
-Yaya<char>* CalculateTree::CreteBinary(Yaya<char>** root)
-{
-	//为根节点分配空间
-	*root = new Yaya<char>();
-	char input;
-	if (!isFlag)
+	InitOperators(opers);
+	prt_size = infix.size();
+	std::string end{"0"};
+	std::stack<std::string> stk; // 操作符栈
+	for (int i = infix.size() - 1; i >= 0; --i) // 从右到左扫描
 	{
-		std::cout << "请输入结束标志" << std::endl;
-		std::cin >> flag;
-		isFlag = true;
-	}
-	std::cout << "请输入结点数据" << std::endl;
-	std::cin >> input;
-	if (input == flag)
-	{
-		return false;
-	}
-	//创建当前结点
-	(*root)->data = input;
-	//递归创建左子树和右子树
-	(*root)->left = new Yaya<char>();
-	(*root)->right = new Yaya<char>();
-
-	if (!CreteBinary(&((*root)->left)))
-	{
-		delete (*root)->left;
-		(*root)->left = nullptr;
-	}
-	if (!CreteBinary(&((*root)->right)))
-	{
-		delete (*root)->right;
-		(*root)->right = nullptr;
-	}
-}
-
-/*先序遍历*/
-void CalculateTree::PreTraverse(Yaya<char>* root)
-{
-	if (root)
-	{
-		PreTraverse(root->left);
-		std::cout << root->data << std::endl;
-		PreTraverse(root->right);
-	}
-}
-
-char* CalculateTree::Transform(char * middle)
-{
-	char front[200] = "";
-	int i = 0;
-	bool kuFlag = false;
-	char temp = '\0';
-	float num = 0;
-	while (middle[i] != '\0')
-	{
-		//运算数
-		if (middle[i] == '-')
+		if (!IsOperator(infix[i], opers)) // 如果是操作数
 		{
-			temp = '+';
-			while (!stackChar.Empty() && Prio(stackChar.GetTopElem()) >= Prio(temp))
-			{
-				float temp = Computer(stackNum.PopStack(), stackNum.PopStack(),
-					stackChar.PopStack());
-				stackNum.PushStakc(&temp);
-			}
-			stackChar.PushStakc(&temp);
-			++i;
-			continue;
+			prefix.push_back(end);
+			prefix.push_back(end);
+			prefix.push_back(infix[i]);
+			
 		}
-		if (middle[i] > '0'&&middle[i] <= '9')
+		else // 如果是操作符
 		{
-			num = 0;
-			while (middle[i] >= '0'&&middle[i] <= '9')
+			if (infix[i] == ")") // 如果是右括号，则直接入栈
 			{
-				num = num * 10 + middle[i++] - '0';
+				stk.push(infix[i]);
 			}
-			//处理小数部分
-			if (middle[i] == '.')
+			else if (infix[i] == "(") // 如果是左括号
 			{
-				++i;
-				float temp = 0;
-				int flag = 0;
-				while (middle[i] >= '0'&&middle[i] <= '9')
+				// 依次弹出栈中的操作符，直至遇到右括号
+				while (!stk.empty())
 				{
-					temp = temp * 10 + middle[i++] - '0';
-					++flag;
-				}
-				temp /= pow(10, flag);
-				num += temp;
-			}
-			stackNum.PushStakc(&num);
-			continue;
-		}
-		//左括号
-		if (middle[i] == '(')
-		{
-			stackChar.PushStakc(middle + i);
-			++i;
-			kuFlag = true;
-			continue;
-		}
-		//右括号
-		if (middle[i] == ')')
-		{
-			if (kuFlag)
-			{
-				temp = stackChar.PopStack();
-				while (temp != '(')
-				{
-					num = Computer(stackNum.PopStack(), stackNum.PopStack(), temp);
-					stackNum.PushStakc(&num);
-					temp = stackChar.PopStack();
-				}
-				kuFlag = false;
-			}
-			else
-			{
-				temp = stackChar.PopStack();
-				while (temp != '(')
-				{
-					num = Computer(stackNum.PopStack(), stackNum.PopStack(), temp);
-					stackNum.PushStakc(&num);
-					temp = stackChar.PopStack();
+					if (stk.top() == ")")
+					{
+						stk.pop();
+						break;
+					}
+					else
+					{
+						prefix.push_back(stk.top());
+						stk.pop();
+					}
 				}
 			}
-			++i;
-			continue;
+			else // 如果是其他操作符
+			{
+				while (!stk.empty() && stk.top() != ")" && opers[stk.top()] > opers[infix[i]]) // 栈顶操作符优先级大于当前操作符优先级
+				{
+					prefix.push_back(stk.top());
+					stk.pop();
+				}
+				// 将当前操作符入栈
+				stk.push(infix[i]);
+			}
 		}
-		//普通运算符
-		while (!stackChar.Empty() && Prio(stackChar.GetTopElem()) >= Prio(middle[i]))
-		{
-			float temp = Computer(stackNum.PopStack(), stackNum.PopStack(),
-				stackChar.PopStack());
-			stackNum.PushStakc(&temp);
-		}
-		stackChar.PushStakc(middle + i);
-		++i;
 	}
-	while (!stackChar.Empty())
+
+	// 检测操作符栈是否为空
+	while (!stk.empty())
 	{
-		float temp = 0.0;
-		temp = Computer(stackNum.PopStack(), stackNum.PopStack(), stackChar.PopStack());
-		stackNum.PushStakc(&temp);
+		prefix.push_back(stk.top());
+		stk.pop();
 	}
-	std::cout << stackNum.GetTopElem() << std::endl;
-	return front;
+	// 将prefix翻转
+	reverse(prefix.begin(), prefix.end());
+	return;
 }
 
-float CalculateTree::Computer(float a, float b, char c)
+void CalculateTree::GetInfix(std::vector<std::string>& infix)
+{
+	infix.clear();
+	std::string line;
+	std::cout << "每两个字符之间必须要有空格隔开，否则表达式不够漂亮，程序不接受" << std::endl;
+	getline(std::cin, line);
+
+	std::istringstream sin(line);
+	std::string tmp;
+	while (sin >> tmp)
+	{
+		infix.push_back(tmp);
+
+	}
+}
+
+void CalculateTree::InitOperators(std::map<std::string, int>& opers)
+{
+	opers["("] = 100;
+	opers[")"] = 900;
+	opers["+"] = 100;
+	opers["-"] = 100;
+	opers["*"] = 200;
+	opers["/"] = 200;
+	opers["^"] = 200;
+	opers["%"] = 200;
+}
+
+Yaya<std::string>* CalculateTree::MainComputer()
+{
+	InitOperators(opers);
+	int num = 0;
+	float num1 = 0;
+	float num2 = 0;
+	float result = 0;
+	
+	while (prt_level != 1)
+	{
+		lastNodes.clear();
+		GetLastAllNode(lastNodes, 1, prt_root);
+		num = lastNodes.size();
+		while (num != 0)
+		{
+			if (IsOperator(lastNodes[num - 1]->data, opers)) // 如果是操作符
+			{
+				num1 = GetFloat(lastNodes[num - 1]->left->data);
+				num2 = GetFloat(lastNodes[num - 1]->right->data);
+				result = ComputerResult(num1, num2, lastNodes[num - 1]->data[0]);
+
+				std::stringstream ss;
+				ss << result;
+
+				lastNodes[num - 1]->data = ss.str();
+				delete lastNodes[num - 1]->left;
+				delete lastNodes[num - 1]->right;
+				lastNodes[num - 1]->left = nullptr;
+				lastNodes[num - 1]->right = nullptr;
+			}
+			--num;
+		}
+		--prt_level;
+	}
+	
+	return prt_root;
+}
+
+float CalculateTree::ComputerResult(float a, float b, char c)
 {
 	float result = 0;
 	switch (c)
@@ -295,56 +187,129 @@ float CalculateTree::PowerCom(float a, int b)
 	return result;
 }
 
-int CalculateTree::Prio(char c)
+
+bool CalculateTree::IsOperator(const std::string & op, const std::map<std::string, int>& opers)
 {
-	int result = 0;
-	switch (c)
+	auto cit = opers.find(op);
+	if (cit != opers.end())
 	{
-	case '(':
-		result = 1;
-		break;
-	case '+':
-	case '-':
-		result = 2;
-		break;
-	case '/':
-	case '*':
-	case '^':
-	case '%':
-		result = 3;
-		break;
-	default:
-		break;
+		return true;
 	}
+	else
+	{
+		return false;
+	}
+}
+
+void CalculateTree::Display(const std::vector<std::string>& fix)
+{
+	lastNodes.clear();
+	GetLastAllNode(lastNodes, 1, prt_root);
+	std::cout << "上层结点：";
+	for (auto i = 0; i != lastNodes.size(); ++i)
+	{
+		std::cout << lastNodes[i]->data << ' ';
+	}
+	std::cout << "前缀表达式：";
+	for (auto i = 0; i != fix.size(); ++i)
+	{
+		std::cout << fix[i] << ' ';
+	}
+	std::cout << std::endl;
+}
+
+float CalculateTree::GetFloat(std::string str)
+{
+	float b = 0;
+	float a = 0;
+	bool flag = true;
+	int num = str.size();
+	int temp = 1;
+	while (num != 0)
+	{
+		if (str[num - 1] == '.')
+		{
+			b /= temp;
+			--num;
+			flag = false;
+			temp = 1;
+			continue;
+		}
+		if (flag)
+		{
+			b += (int)(str[num - 1] - '0') * temp;
+			--num;
+			temp *= 10;
+		}
+		else
+		{
+			a += (int)(str[num - 1] - '0') * temp;
+			--num;
+			temp *= 10;
+		}
+	}
+	float result = a + b;
 	return result;
 }
 
-Yaya<char>* CalculateTree::AddNode(const char & key, int direction, Yaya<char>*& root)
+
+Yaya<std::string>* CalculateTree::CreateTree(const std::vector<std::string>& fix, int& index)
 {
-	if (!root)
-	{
-		root = new Yaya<char>();
-		root->data = key;
-	}
-	if (direction == 0)//左孩子
-	{
-		if (root->left == NULL) {//找到对应的叶节点插入
-			root->left = new Yaya<char>;
-			root->left->data = key;
-		}
-		else {
-			root->left = AddNode(key, direction, root->left);
-		}
-	}
-	else//右孩子
-	{
-		if (root->right == NULL) {//找到相应的叶节点插入
-			root->right = new Yaya<char>;
-			root->right->data = key;
-		}
-		else {
-			root->right = AddNode(key, direction, root->right);
-		}
-	}
-	return root;
+	//若空串或者index超出范围，则返回空指针
+	if (fix.size() == 0 || index == fix.size() || fix[index] == "0")
+		return nullptr;
+	Yaya<std::string>* T = new Yaya<std::string>();
+	T->data = fix[index++];
+	T->left = CreateTree(fix, index);
+	T->right = CreateTree(fix, ++index);
+	return T;
+	
 }
+
+void CalculateTree::CreateTree(const std::vector<std::string>& fix)
+{
+	int index = 0;
+	prt_root = CreateTree(fix,index);
+	prt_level = GetLeafCount(prt_root);
+}
+
+int CalculateTree::GetLeafCount(Yaya<std::string>* node)
+{
+	if (nullptr == node)
+	{
+		return 0;
+	}
+	if (node->left == nullptr&&node->right == nullptr)
+	{
+		return 1;
+	}
+	return GetLeafCount(node->left) + GetLeafCount(node->right);
+
+}
+
+void CalculateTree::GetLastAllNode(std::vector<Yaya<std::string>*>& nodes, int depth, Yaya<std::string>* root)
+{
+	if (depth == prt_level - 1)
+	{
+		nodes.push_back(root);
+		return;
+	}
+	if (root->left == nullptr)
+	{
+		return;
+	}
+	GetLastAllNode(nodes, ++depth, root->left);
+	GetLastAllNode(nodes, depth, root->right);
+}
+
+
+void CalculateTree::PreOrderTraverse(Yaya<std::string>* root)
+{
+	if (root)
+	{
+		std::cout << root->data << std::endl;
+		PreOrderTraverse(root->left);
+		PreOrderTraverse(root->right);
+	}
+}
+
